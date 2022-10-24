@@ -22,16 +22,28 @@ namespace SignalRTest
             timer.Start();
         }
 
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            new Thread(async () =>
+            {
+                try
+                {
+                    // Variant 1
+                    //new HubConnectionBuilder().WithUrl($"https://localhost:5001/").Build().StartAsync();
+
+                    // Variant 2
+                    //new HubConnectionBuilder().WithUrl($"https://localhost:5001/").Build().StartAsync().Wait();
+
+                    // Variant 3
+                    await new HubConnectionBuilder().WithUrl($"https://localhost:5001/").Build().StartAsync();
+                }
+                catch { }
+            }).Start();
+        }
+
         private void Timer_Tick(object? sender, EventArgs e)
         {
             textBlock.Text = i++.ToString();
-        }
-
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            new Thread(() =>
-                new HubConnectionBuilder().WithUrl($"https://localhost:5001/").Build().StartAsync()
-            ).Start();
         }
     }
 }
